@@ -12,9 +12,10 @@ module.exports = `#graphql
 
     type Mutation{
         createUser(name: String!, phone: String, email: String!, address: String, password: String!, image: String, role: String!): User
+        deleteUser(_id:ID!): String 
     }
 
     type Query{
-        hello: String 
+        getUser(_id:ID!): User  
     }
     `;

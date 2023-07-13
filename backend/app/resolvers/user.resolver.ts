@@ -1,11 +1,15 @@
 import { GraphQLError } from "graphql"
 import User from "../schemas/user"
+import { UserInputError } from "apollo-server-core"
 
 module.exports = {
     Query: {
-       hello: () => {
-              return "Hello world with GraphQL"
-       }
+        getUser: async (root: any, args: any) => {
+            const { _id } = args;
+            const user = await User.findById(_id);
+            console.log(user);
+            return user;
+          },
     },
     Mutation: {
         createUser: async (root: any,args:any) => {
@@ -28,6 +32,16 @@ module.exports = {
                 } 
             )
             })
-            }
+            },
+            deleteUser: async (root: any, args: any) => {
+                const { _id } = args;
+                const user = await User.findByIdAndDelete(_id);
+                if (!user) {
+                  throw new UserInputError("User not found", {
+                    invalidArgs: args,
+                  });
+                }
+                return "User deleted successfully";
+              },
         }
     }
